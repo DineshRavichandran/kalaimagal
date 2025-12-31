@@ -47,7 +47,7 @@
 
                 </ul>
 
-                <a href="admission.html" class="admission-btn mt-3 mt-lg-0 ms-lg-4">Admissions Open</a>
+                <a href="admission.php" class="admission-btn mt-3 mt-lg-0 ms-lg-4">Admissions Open</a>
             </div>
 
         </div>

@@ -70,7 +70,7 @@ include 'header.php';
         <a href="announcement.php" class="announcement-link">
             <div class="announcement-text py-1">
                 <?php 
-                $qry = "SELECT * FROM latest_message WHERE show_flag = '0'";
+                $qry = "SELECT * FROM latest_message WHERE show_flag = '1'";
                 $result = $mysqli->query($qry);
 
                 if ($result && $result->num_rows > 0) {
@@ -92,7 +92,7 @@ include 'header.php';
 
   <div class="carousel-inner">
     <?php
-    $qry = "SELECT * FROM banners WHERE status = '0'";
+    $qry = "SELECT * FROM banners WHERE status = '1'";
     $result = $mysqli->query($qry);
     $i = 0;
 
@@ -507,7 +507,7 @@ include 'header.php';
         <p class="lead">Apply today and give your child the best learning experience.</p>
 
         <!-- FIXED BUTTON -->
-        <a href="admission.html" class="btn cta-btn px-4 py-2 mt-3">Apply Now</a>
+        <a href="admission.php" class="btn cta-btn px-4 py-2 mt-3">Apply Now</a>
 
     </div>
 </section>
