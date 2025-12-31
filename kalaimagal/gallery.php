@@ -55,45 +55,109 @@ include 'header.php';
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
 
      <!-- Trip Gallery -->
-    <div class="container my-5">
-      <div class="row">
-   <?php
+<div class="container my-5">
+    <div class="row g-3">
+        <?php
+        $qry = "SELECT * FROM `category`";
+        $result = $mysqli->query($qry);
 
-$qry = "SELECT * FROM `category`";
-$result = $mysqli->query($qry);
+        while ($row = $result->fetch_assoc()) {
+            $title = $row['CatName'];
+            $thumb = $row['thumb_img'];
+            $CatID = $row['CatID'];
+        ?>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="gallery-item position-relative overflow-hidden rounded shadow-sm animate-item">
+                    <!-- Main thumbnail -->
+                    <a data-fancybox="cat<?= $CatID ?>" href="<?= $thumb ?>">
+                        <img src="<?= $thumb ?>" class="img-fluid w-100 gallery-img" alt="<?= $title ?>">
+                        <!-- Hover overlay -->
+                        <div class="overlay d-flex align-items-center justify-content-center">
+                            <h5 class="text-white mb-0"><?= $title ?></h5>
+                        </div>
+                    </a>
 
-while ($row = $result->fetch_assoc()) {
+                    <?php
+                    // Hidden additional images for Fancybox
+                    $qry2 = "SELECT * FROM `gallery` WHERE `GalCatID`='$CatID' AND GalStatus='0'";
+                    $result2 = $mysqli->query($qry2);
+                    while ($image = $result2->fetch_assoc()) {
+                        $GalPath = $image['GalPath'];
+                        echo "<a data-fancybox='cat$CatID' href='$GalPath' style='display:none;'></a>";
+                    }
+                    ?>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+</div>
 
-    $title = $row['CatName'];
-    $thumb = $row['thumb_img'];
-    $CatID = $row['CatID'];
-
-    echo "<div class='col-md-3 col-sm-6 mb-4'>";
-    echo "<div class='card shadow border-0 text-center h-100'>";
-    echo "<div class='card-body'>";
-
-    echo "<h5>$title</h5>";
-
-    // Thumbnail (Main Image)
-    echo "<a data-fancybox='cat$CatID' href='$thumb'>";
-    echo "<img src='$thumb' class='img-fluid' alt='$title'>";
-    echo "</a>";
-
-    // Fetch all images for this category
-    $qry2 = "SELECT * FROM `gallery` WHERE `GalCatID`='$CatID' and GalStatus = '0'";
-    $result2 = $mysqli->query($qry2);
-
-    while ($image = $result2->fetch_assoc()) {
-        $GalPath = $image['GalPath'];
-        echo "<a data-fancybox='cat$CatID' href='$GalPath' style='display:none;'></a>";
-    }
-
-    echo "</div>"; // card-body
-    echo "</div>"; // card
-    echo "</div>"; // col
+<style>
+/* Gallery Image */
+.gallery-item {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
 }
 
-?>
+/* Image styling */
+.gallery-img {
+    display: block;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* Overlay effect */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.gallery-item:hover .overlay {
+    opacity: 1;
+}
+
+/* Overlay text */
+.overlay h5 {
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+/* Fade-in animation on load */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-item {
+    opacity: 0;
+    animation: fadeInUp 0.6s forwards;
+}
+
+/* Stagger animation delay */
+.row .col-lg-3:nth-child(1) .animate-item { animation-delay: 0s; }
+.row .col-lg-3:nth-child(2) .animate-item { animation-delay: 0.1s; }
+.row .col-lg-3:nth-child(3) .animate-item { animation-delay: 0.2s; }
+.row .col-lg-3:nth-child(4) .animate-item { animation-delay: 0.3s; }
+/* Add more nth-child rules if you have more images */
+</style>
+
 
 
 </div>
